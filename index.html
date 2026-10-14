@@ -5,22 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ventas | Gerencia Comercial</title>
   <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0b109e">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
 /* ---------- Tokens ---------- */
 :root {
   color-scheme: light;
-  --bg: #f3f4f6;
-  --surface: #fcfcfb;
-  --text: #1a1a19;
-  --text-2: #52514e;
-  --text-3: #6f6e69;
-  --line: #e2e2dd;
-  --grid: #ececE8;
-  --focus: #2a78d6;
-  --series-1: #2a78d6;
+  /* Colores corporativos */
+  --brand: #0b109e;          /* azul */
+  --brand-yellow: #f4e517;   /* amarillo */
+  --brand-yellow-hover: #e3d400;
+  --on-brand: #ffffff;
+  --on-brand-2: #c9ccf5;
+
+  --bg: #f4f5fb;
+  --surface: #ffffff;
+  --text: #0e1030;
+  --text-2: #4a4d73;
+  --text-3: #6a6d8f;
+  --line: #e1e3f0;
+  --grid: #eceef7;
+  --focus: #0b109e;
+  --link: #0b109e;
+  /* Gráficos: azul corporativo para una sola serie; paleta validada para varias series */
+  --series-single: #0b109e;
+  --series-1: #3340d9;
   --series-2: #eb6834;
   --series-3: #1baf7a;
   --series-4: #eda100;
@@ -28,25 +39,27 @@
   --series-6: #008300;
   --series-7: #6250d6;
   --series-8: #e34948;
-  --series-other: #9a9993;
+  --series-other: #9a9bb3;
   --warn-bg: #fff6e0;
   --warn-line: #ecd596;
   --err-bg: #fdeceb;
   --err-line: #f1b9b8;
-  --font: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
     color-scheme: dark;
-    --bg: #121211;
-    --surface: #1a1a19;
-    --text: #f0efec;
-    --text-2: #c3c2b7;
-    --text-3: #9d9c93;
-    --line: #2e2e2b;
-    --grid: #262624;
-    --focus: #3987e5;
-    --series-1: #3987e5;
+    --bg: #0a0b1c;
+    --surface: #14151f;
+    --text: #f1f2fb;
+    --text-2: #c4c7e6;
+    --text-3: #9a9dc2;
+    --line: #272a45;
+    --grid: #1f2138;
+    --focus: #8f98ff;
+    --link: #8f98ff;
+    --series-single: #6a75ff;
+    --series-1: #6a75ff;
     --series-2: #d95926;
     --series-3: #199e70;
     --series-4: #c98500;
@@ -54,7 +67,7 @@
     --series-6: #008300;
     --series-7: #9085e9;
     --series-8: #e66767;
-    --series-other: #75746d;
+    --series-other: #75768f;
     --warn-bg: #2b2412;
     --warn-line: #54451c;
     --err-bg: #2d1817;
@@ -63,15 +76,17 @@
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #121211;
-  --surface: #1a1a19;
-  --text: #f0efec;
-  --text-2: #c3c2b7;
-  --text-3: #9d9c93;
-  --line: #2e2e2b;
-  --grid: #262624;
-  --focus: #3987e5;
-  --series-1: #3987e5;
+  --bg: #0a0b1c;
+  --surface: #14151f;
+  --text: #f1f2fb;
+  --text-2: #c4c7e6;
+  --text-3: #9a9dc2;
+  --line: #272a45;
+  --grid: #1f2138;
+  --focus: #8f98ff;
+  --link: #8f98ff;
+  --series-single: #6a75ff;
+  --series-1: #6a75ff;
   --series-2: #d95926;
   --series-3: #199e70;
   --series-4: #c98500;
@@ -79,7 +94,7 @@
   --series-6: #008300;
   --series-7: #9085e9;
   --series-8: #e66767;
-  --series-other: #75746d;
+  --series-other: #75768f;
   --warn-bg: #2b2412;
   --warn-line: #54451c;
   --err-bg: #2d1817;
@@ -98,31 +113,39 @@ body {
   font-size: 15px;
   line-height: 1.45;
   font-variant-numeric: tabular-nums;
-  max-width: 1280px;
-  margin-inline: auto;
-  padding: 24px 24px 40px;
 }
+.wrap { max-width: 1280px; margin-inline: auto; padding: 24px 24px 40px; }
 h1, h2, p { margin: 0; }
 h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
 h2 { font-size: 15px; font-weight: 600; }
 .muted { color: var(--text-3); }
-a { color: var(--focus); }
+a { color: var(--link); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
 
 /* ---------- Encabezado y filtros ---------- */
-.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 20px; }
-.top-title p { font-size: 13px; margin-top: 2px; }
+.top { background: var(--brand); color: var(--on-brand); }
+.top-inner {
+  max-width: 1280px; margin-inline: auto; padding: 20px 24px;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+}
+.top h1 { color: var(--on-brand); }
+.top-title p { font-size: 13px; margin-top: 2px; color: var(--on-brand-2); }
 .top-actions { display: flex; gap: 8px; }
+.top :focus-visible { outline-color: var(--brand-yellow); }
 
 .btn {
   font: inherit; font-size: 14px; font-weight: 500;
   color: var(--text); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 8px;
-  padding: 8px 14px; cursor: pointer; min-height: 38px;
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 8px 18px; cursor: pointer; min-height: 38px;
 }
 .btn:hover { border-color: var(--text-3); }
+.btn-primary { background: var(--brand-yellow); color: var(--brand); border-color: var(--brand-yellow); font-weight: 600; }
+.btn-primary:hover { background: var(--brand-yellow-hover); border-color: var(--brand-yellow-hover); }
+.btn-ghost { background: transparent; color: var(--on-brand); border-color: rgba(255, 255, 255, .55); }
+.btn-ghost:hover { border-color: var(--on-brand); }
 .btn:disabled { opacity: .55; cursor: progress; }
-.btn-quiet { border-color: transparent; background: transparent; color: var(--focus); }
+.btn-quiet { border-color: transparent; background: transparent; color: var(--link); }
 .btn-quiet:hover { border-color: transparent; text-decoration: underline; }
 
 .filters {
@@ -134,7 +157,7 @@ a { color: var(--focus); }
 .field-date { min-width: 140px; }
 select, input[type="date"], input[type="search"] {
   font: inherit; font-size: 14px; color: var(--text);
-  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
   padding: 8px 10px; min-height: 38px;
 }
 select:hover, input:hover { border-color: var(--text-3); }
@@ -148,7 +171,7 @@ select:hover, input:hover { border-color: var(--text-3); }
 .banner-error { background: var(--err-bg); border-color: var(--err-line); }
 .banner-actions { display: flex; align-items: center; gap: 16px; }
 .check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
-.check input { width: 16px; height: 16px; accent-color: var(--focus); }
+.check input { width: 16px; height: 16px; accent-color: var(--brand); }
 
 /* ---------- KPIs ---------- */
 .kpis {
@@ -161,6 +184,7 @@ select:hover, input:hover { border-color: var(--text-3); }
 }
 .kpi h2 { color: var(--text-2); font-weight: 500; font-size: 14px; }
 .kpi-value { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; margin-top: 6px; overflow-wrap: anywhere; }
+.kpi-hero { border-top: 4px solid var(--brand-yellow); }
 .kpi-hero .kpi-value { font-size: 44px; line-height: 1.1; }
 .kpi-note { font-size: 13px; color: var(--text-2); margin-top: 6px; min-height: 19px; }
 
@@ -213,7 +237,9 @@ body.is-loading .kpi-value, body.is-loading .chart-box { opacity: .35; }
   .chart-short { height: 280px; }
 }
 @media (max-width: 560px) {
-  body { padding: 16px 16px 32px; font-size: 14px; }
+  body { font-size: 14px; }
+  .wrap { padding: 16px 16px 32px; }
+  .top-inner { padding: 16px; }
   h1 { font-size: 22px; }
   .kpi-hero .kpi-value { font-size: 36px; }
   .kpi-value { font-size: 24px; }
@@ -226,7 +252,10 @@ body.is-loading .kpi-value, body.is-loading .chart-box { opacity: .35; }
   * { animation: none !important; transition: none !important; }
 }
 @media print {
-  body { background: #fff; padding: 0; }
+  body { background: #fff; }
+  .top { background: #fff; color: #000; border-bottom: 2px solid var(--brand); }
+  .top h1, .top-title p { color: #000; }
+  .wrap { padding: 16px 0; }
   .top-actions, .filters, .card-tools, #btn-more, .banner-actions { display: none !important; }
 }
 </style>
@@ -237,15 +266,19 @@ body.is-loading .kpi-value, body.is-loading .chart-box { opacity: .35; }
 </head>
 <body>
   <header class="top">
-    <div class="top-title">
-      <h1>Ventas</h1>
-      <p id="freshness" class="muted">Cargando datos…</p>
-    </div>
-    <div class="top-actions">
-      <button id="btn-refresh" class="btn" type="button">Actualizar</button>
-      <button id="btn-theme" class="btn" type="button" aria-label="Cambiar entre tema claro y oscuro">Tema</button>
+    <div class="top-inner">
+      <div class="top-title">
+        <h1>Ventas</h1>
+        <p id="freshness">Cargando datos…</p>
+      </div>
+      <div class="top-actions">
+        <button id="btn-refresh" class="btn btn-primary" type="button">Actualizar</button>
+        <button id="btn-theme" class="btn btn-ghost" type="button" aria-label="Cambiar entre tema claro y oscuro">Tema</button>
+      </div>
     </div>
   </header>
+
+  <div class="wrap">
 
   <section class="filters" aria-label="Filtros">
     <label class="field">
@@ -385,6 +418,7 @@ body.is-loading .kpi-value, body.is-loading .chart-box { opacity: .35; }
   <footer class="foot muted">
     Los datos se leen de la hoja de ventas y se actualizan cada vez que se abre esta página.
   </footer>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script>
@@ -880,7 +914,7 @@ body.is-loading .kpi-value, body.is-loading .chart-box { opacity: .35; }
     var entries = sortedEntries(totals);
     var grand = entries.reduce(function (a, e) { return a + e[1]; }, 0);
     if (limit && entries.length > limit) entries = entries.slice(0, limit);
-    var colors = entries.map(function (e) { return colorFn ? colorFn(e[0]) : css('--series-1'); });
+    var colors = entries.map(function (e) { return colorFn ? colorFn(e[0]) : css('--series-single'); });
     var o = baseOptions();
     o.indexAxis = 'y';
     o.layout = { padding: { right: 56 } };
